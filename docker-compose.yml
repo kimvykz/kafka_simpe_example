@@ -66,15 +66,36 @@ services:
       - ./data/kafka-3:/var/lib/kafka/data
       - ./data/logs/kafka-3:/var/log/kafka
 
+  kafka-4:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-4
+    ports:
+      - "9095:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-4:9093,OUTSIDE://kafka-4:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
+      KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./data/kafka-4:/var/lib/kafka/data
+      - ./data/logs/kafka-4:/var/log/kafka
+
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
     container_name: kafdrop
     environment:
-      KAFKA_BROKERCONNECT: "kafka-1:9092"
+      KAFKA_BROKERCONNECT: "kafka-1:9092,kafka-2:9092,kafka-3:9092,kafka-4:9092"
     ports:
       - "9000:9000"
     depends_on:
       - kafka-1
+      - kafka-2
+      - kafka-3
+      - kafka-4
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:latest
@@ -83,8 +104,8 @@ services:
       - "9021:9021"
     environment:
       CONTROL_CENTER_ZOOKEEPER_CONNECT: zookeeper:2181
-      CONTROL_CENTER_KAFKA_BROKER_CONNECT: kafka-1:9092,kafka-2:9092,kafka-3:9092
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      CONTROL_CENTER_KAFKA_BROKER_CONNECT: kafka-1:9092,kafka-2:9092,kafka-3:9092,kafka-4:9092
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092,kafka-4:9092
       CONTROL_CENTER_REPLICATION_FACTOR: 1
     volumes:
       - ./data/control-center:/var/lib/control-center
