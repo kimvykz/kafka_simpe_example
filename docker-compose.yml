@@ -10,79 +10,96 @@ services:
     volumes:
       - ./data/zookeeper:/data
       - ./data/datalog/zookeeper:/datalog
-
+    networks:
+      - kafka-net
 
   kafka-1:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-1
     ports:
-      - "9092:9092"
+      - "9192:9192"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-1:9093,OUTSIDE://kafka-1:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
-      KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-1:9093,OUTSIDE://kafka-1:9092,EXTERNAL://localhost:9192
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092,EXTERNAL://0.0.0.0:9192
+      # KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
+      # KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
     volumes:
       - ./data/kafka-1:/var/lib/kafka/data
       - ./data/logs/kafka-1:/var/log/kafka
+    networks:
+      - kafka-net
 
   kafka-2:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-2
     ports:
-      - "9093:9092"
+      - "9193:9193"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-2:9093,OUTSIDE://kafka-2:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
-      KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-2:9093,OUTSIDE://kafka-2:9092,EXTERNAL://localhost:9193
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092,EXTERNAL://0.0.0.0:9193
+      # KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
+      # KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
     volumes:
       - ./data/kafka-2:/var/lib/kafka/data
       - ./data/logs/kafka-2:/var/log/kafka
+    networks:
+      - kafka-net  
 
   kafka-3:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-3
     ports:
-      - "9094:9092"
+      - "9194:9194"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-3:9093,OUTSIDE://kafka-3:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
-      KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-3:9093,OUTSIDE://kafka-3:9092,EXTERNAL://localhost:9194
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092,EXTERNAL://0.0.0.0:9194
+      # KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
+      # KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
     volumes:
       - ./data/kafka-3:/var/lib/kafka/data
       - ./data/logs/kafka-3:/var/log/kafka
+    networks:
+      - kafka-net
 
   kafka-4:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-4
     ports:
-      - "9095:9092"
+      - "9195:9195"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-4:9093,OUTSIDE://kafka-4:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
-      KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka-4:9093,OUTSIDE://kafka-4:9092,EXTERNAL://localhost:9195
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092,EXTERNAL://0.0.0.0:9195
+      # KAFKA_LISTENER_NAME_INSIDE_PORT: 9093
+      # KAFKA_LISTENER_NAME_OUTSIDE_PORT: 9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_MIN_INSYNC_REPLICAS: 1
     volumes:
       - ./data/kafka-4:/var/lib/kafka/data
       - ./data/logs/kafka-4:/var/log/kafka
+    networks:
+      - kafka-net
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
@@ -96,6 +113,8 @@ services:
       - kafka-2
       - kafka-3
       - kafka-4
+    networks:
+      - kafka-net
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:latest
@@ -109,3 +128,9 @@ services:
       CONTROL_CENTER_REPLICATION_FACTOR: 1
     volumes:
       - ./data/control-center:/var/lib/control-center
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge
